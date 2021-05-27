@@ -25,3 +25,40 @@ if [ ! -w $BOOK]; then
     exit 2
 fi
 
+menu
+
+menu()
+{
+    echo "\n\n\n\n"
+    echo "----- Address Book -----"
+    echo "1. List / Search"
+    echo "2. Add"
+    echo "3. Edit"
+    echo "4. Remove"
+    echo "q. quit"
+    echo "-------------------------"
+    while [ $i != "q"]; do
+        echo -en "Enter your selection: "
+        read i
+        case $i in
+        "1")
+        list_items
+        ;;
+        "2")
+        add_item
+        ;;
+        "3")
+        edit_item
+        ;;
+        "4")
+        remove_item
+        ;;
+        "q")
+        echo "Quitting"
+        exit 0
+        ;;
+        *)
+        echo "Unexpected input"
+        ;;
+        esac
+}
