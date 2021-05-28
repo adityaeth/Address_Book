@@ -74,16 +74,21 @@ locate_single_item(){
   if [ -z "$n" ]; then
     n=0
   fi
-  if [ "${n}" -ne "1" ]; then
-    echo "${n} matches found. Only one allowed. Try again."
-  fi
-  echo "Specific search term? ( q=exit): "
-  read search
-  if [ "$search" == "q" ]; then
-    return 0
-  fi
-  n=`num_lines "$search"`
-  return `grep -i $search $BOOK | cut -d ":" -f1`
+  while [ "${n}" -ne "1" ]; do
+    #list_items "$search"
+    echo -en "${n} matches found. Please choose a "
+    case "$n" in 
+      "0") echo "less" ;;
+      "*") echo "more" ;;
+    esac
+    echo "specific search term (q to return to menu): "
+    read search
+    if [ "$search" == "q" ]; then
+      return 0
+    fi
+    n=`num_lines "$search"`
+  done
+  return `grep -in $search $BOOK |cut -d":" -f1`
 }
 
 edit_item(){
