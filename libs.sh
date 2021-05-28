@@ -1,6 +1,6 @@
 
 # Global variables
-BOOK=.addressbook
+BOOK=~/.addressbook
 export BOOK
 
 find_lines() {
@@ -19,12 +19,10 @@ num_lines()
 
 list_items() {
   if [ "$#" -eq "0" ]; then
-    echo -en "Search for: "
+    echo -en "Search for: ( blank to list all )"
     read search
     if [ -z "$search" ]; then
-      echo "Error: Search field can't be empty"
-      echo "Try again"
-      list_items
+      search="."
     fi
     echo
     find_lines "$search" | while read i
@@ -32,11 +30,13 @@ list_items() {
       echo "$i" | tr ':' '\t'
     done
   fi
+  echo
   echo -en "Matches found: "
   num_lines "$search"
 }
 
 add_item() {
+  echo
   echo "Adding Details..."
   echo 
   echo -en "Name: "
@@ -53,3 +53,22 @@ add_item() {
 
   echo "${name}:${phone}:${email}" >> $BOOK
   }
+
+locate_single_item(){
+  echo -en "Enter search keyword: "
+  read search
+  n=`num_lines "$search"`
+  if [ -z "$n" ]; then
+    n=0
+  fi
+  if [ "${n}" -ne "1" ]; then
+    echo "${n} matches found. Only one allowed. Try again."
+  fi
+  echo "Specific search term? ( q=exit): "
+  read search
+  if [ "$search" == "q" ]; then
+    return 0
+  fi
+  n=`num_lines "$search"`
+  return `grep -i $search $BOOK | cut -d ":" -f1`
+}
