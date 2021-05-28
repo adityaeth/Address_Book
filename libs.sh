@@ -88,7 +88,7 @@ locate_single_item(){
     fi
     n=`num_lines "$search"`
   done
-  return `grep -in $search $BOOK |cut -d":" -f1`
+  return `grep -in $search $BOOK |cut -d ":" -f1`
 }
 
 edit_item(){
@@ -98,6 +98,33 @@ edit_item(){
 	return
   fi
   list_items "$search"
+  thisline=`grep -i "$search" $BOOK`
+  oldname=`echo $thisline|cut -d":" -f1`
+  oldphone=`echo $thisline|cut -d":" -f2`
+  oldemail=`echo $thisline|cut -d":" -f3`
+  echo "SEARCH : $search"
+  grep -v "$search" $BOOK > ${BOOK}.tmp ; mv ${BOOK}.tmp ${BOOK}
+  echo -en "Name [ $oldname ] "
+  read name
+  if [ -z "$name" ]; then
+    name=$oldname
+  fi
+  find_lines "^${name}:"
+  if [ `num_lines "^${name}:"` -ne "0" ]; then
+    echo "Sorry, $name already has an entry."
+    return
+  fi
+  echo -en "Phone [ $oldphone ] "
+  read phone
+  if [ -z "$phone" ]; then
+    phone=$oldphone
+  fi
+  echo -en "Email [ $oldemail ] "
+  read email
+  if [ -z "$email" ]; then
+    email=$oldemail
+  fi
+  echo "${name}:${phone}:${email}" >> $BOOK
 }
 
 remove_item() {
@@ -110,6 +137,8 @@ remove_item() {
   confirm -en "Remove? y/n: "
   if [ "$?" -eq "0" ]; then
   grep -v "$search" $BOOK > ${BOOK}.tmp ; mv ${BOOK}.tmp ${BOOK}
+  echo 
+  echo "Contact successfully removed from DB."
   else
   echo
   echo "Aborting"
