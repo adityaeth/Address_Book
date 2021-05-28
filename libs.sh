@@ -12,6 +12,11 @@ find_lines() {
   return $res
 }
 
+num_lines()
+{
+  grep -i "$@" $BOOK | wc -l
+}
+
 list_items() {
   if [ "$#" -eq "0" ]; then
     echo -en "Search for: "
@@ -30,3 +35,21 @@ list_items() {
   echo -en "Matches found."
   num_lines "$search"
 }
+
+add_item() {
+  echo "Adding Details..."
+  echo 
+  echo -en "Name: "
+  read name
+  find_lines "^${name}:"
+  if [ 'num_lines "^${name}:"' -ne "0" ]; then
+    echo "$name already exist."
+    return
+  fi
+  echo -en "Phone: "
+  read phone
+  echo -en "email: "
+  read email
+
+  echo "${name}:${phone}:${email}" >> $BOOK
+  }
