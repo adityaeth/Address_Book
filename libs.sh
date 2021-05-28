@@ -88,7 +88,7 @@ locate_single_item(){
 
 edit_item(){
   locate_single_item
-  search=`head -$? $BOOK`
+  search=`head -$? $BOOK | tail -1|tr ' ' '.'`
   if [ -z "${search}" ]; then
 	return
   fi
@@ -97,15 +97,16 @@ edit_item(){
 
 remove_item() {
   locate_single_item
-  search=`head -$? $BOOK`
+  search=`head -$? $BOOK | tail -1|tr ' ' '.'`
   if [ -z "${search}" ]; then
     return
   fi
   list_items "$search"
-  confirm -en "Remove? y/n"
+  confirm -en "Remove? y/n: "
   if [ "$?" -eq "0" ]; then
   grep -v "$search" $BOOK > ${BOOK}.tmp ; mv ${BOOK}.tmp ${BOOK}
   else
+  echo
   echo "Aborting"
   fi
 }
