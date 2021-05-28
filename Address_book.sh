@@ -4,18 +4,17 @@
 # Author: Aditya Prakash 
 # https://adityaeth.github.io/
 
-
-menu()
-{
-    echo "\n\n\n\n"
-    echo "----- Address Book -----"
-    echo "1. List / Search"
-    echo "2. Add"
-    echo "3. Edit"
-    echo "4. Remove"
-    echo "q. quit"
-    echo "-------------------------"
-    while [ $i != "q"]; do
+. ./libs.sh
+menu() {
+    while [ "$i" != "q" ]; do
+        echo; echo; 
+        echo "----- Address Book -----"
+        echo "1. List / Search"
+        echo "2. Add"
+        echo "3. Edit"
+        echo "4. Remove"
+        echo "q. quit"
+        echo "-------------------------"
         echo -en "Enter your selection: "
         read i
         case $i in
@@ -39,11 +38,12 @@ menu()
         echo "Unexpected input"
         ;;
         esac
+    done
 }
 
 # Creating file for first run
 
-if [ ! -f $BOOK]; then
+if [ ! -f $BOOK ]; then
     echo "Creating $BOOK..."
     touch $BOOK
 fi
@@ -52,14 +52,14 @@ fi
 
 if [ ! -r $BOOK ]; then
     echo "Error: $BOOK not readable"
-    exit 1
+    #exit 1
 fi
 
 # Checking write permissions
 
-if [ ! -w $BOOK]; then
+if [ ! -w $BOOK ]; then
     echo "Error: $BOOK not writable"
-    exit 2
+    #exit 2
 fi
 
 menu
