@@ -3,6 +3,18 @@
 BOOK=~/.addressbook
 export BOOK
 
+confirm()
+{
+  echo -en "$@"
+  read ans
+  ans=`echo $ans | tr '[a-z]' '[A-Z]'`
+  if [ "$ans" == "Y" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 find_lines() {
   res=-1
   if [ ! -z "$1" ]; then
@@ -25,11 +37,13 @@ list_items() {
       search="."
     fi
     echo
+  else
+    search="$@"
+    fi
     find_lines "$search" | while read i
     do
       echo "$i" | tr ':' '\t'
     done
-  fi
   echo
   echo -en "Matches found: "
   num_lines "$search"
@@ -71,4 +85,14 @@ locate_single_item(){
   fi
   n=`num_lines "$search"`
   return `grep -i $search $BOOK | cut -d ":" -f1`
+}
+
+edit_item(){
+  locate_single_item
+  search=`head -$? $BOOK`
+  if [ -z "${search}" ]; then
+	return
+  fi
+  list_items "$search"
+  confirm "Remove? y/n: "
 }
