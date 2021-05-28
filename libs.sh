@@ -23,10 +23,10 @@ list_items() {
     fi
     echo
   else
-    find_lines "$@" | while read i
+    find_lines "$search" | while read i
     do
       echo "$i" | tr ':' '\t'
   done
   echo -en "Matches found."
-  num_lines "$@"
+  num_lines "$search"
 }
