@@ -1,6 +1,6 @@
 
 # Global variables
-BOOK=~/.addressbook
+BOOK=.addressbook
 export BOOK
 
 find_lines() {
