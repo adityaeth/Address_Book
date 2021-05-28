@@ -3,8 +3,7 @@
 BOOK=~/.addressbook
 export BOOK
 
-confirm()
-{
+confirm() {
   echo -en "$@"
   read ans
   ans=`echo $ans | tr '[a-z]' '[A-Z]'`
@@ -94,5 +93,19 @@ edit_item(){
 	return
   fi
   list_items "$search"
-  confirm "Remove? y/n: "
+}
+
+remove_item() {
+  locate_single_item
+  search=`head -$? $BOOK`
+  if [ -z "${search}" ]; then
+    return
+  fi
+  list_items "$search"
+  confirm -en "Remove? y/n"
+  if [ "$?" -eq "0" ]; then
+  grep -v "$search" $BOOK > ${BOOK}.tmp ; mv ${BOOK}.tmp ${BOOK}
+  else
+  echo "Aborting"
+  fi
 }
