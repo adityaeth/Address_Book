@@ -5,7 +5,7 @@ export BOOK
 
 find_lines() {
   res=-1
-  if [ ! -z "$1"]; then
+  if [ ! -z "$1" ]; then
   grep -i "$@" $BOOK
   res=$?
   fi
@@ -31,6 +31,7 @@ list_items() {
     do
       echo "$i" | tr ':' '\t'
     done
+  fi
   echo -en "Matches found: "
   num_lines "$search"
 }
@@ -40,8 +41,8 @@ add_item() {
   echo 
   echo -en "Name: "
   read name
-  find_lines "^${name}:"
-  if [ 'num_lines "^${name}:"' -ne "0" ]; then
+  find_lines "${name}:"
+  if [ `num_lines "${name}:"` -ne "0" ]; then
     echo "$name already exist."
     return
   fi
