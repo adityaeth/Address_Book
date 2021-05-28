@@ -3,6 +3,7 @@
 BOOK=~/.addressbook
 export BOOK
 
+# Delete confirmation
 confirm() {
   echo -en "$@"
   read ans
@@ -14,6 +15,7 @@ confirm() {
   fi
 }
 
+# find "search" line number 
 find_lines() {
   res=-1
   if [ ! -z "$1" ]; then
@@ -23,6 +25,7 @@ find_lines() {
   return $res
 }
 
+# Find total number of search entries
 num_lines()
 {
   grep -i "$@" $BOOK | wc -l
@@ -138,7 +141,7 @@ remove_item() {
   if [ "$?" -eq "0" ]; then
   grep -v "$search" $BOOK > ${BOOK}.tmp ; mv ${BOOK}.tmp ${BOOK}
   echo 
-  echo "Contact successfully removed from DB."
+  echo `echo "${search}" | cut -d ":" -f1` "successfully removed from DB."
   else
   echo
   echo "Aborting"
