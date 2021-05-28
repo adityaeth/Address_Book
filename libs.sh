@@ -27,12 +27,11 @@ list_items() {
       list_items
     fi
     echo
-  else
     find_lines "$search" | while read i
     do
       echo "$i" | tr ':' '\t'
-  done
-  echo -en "Matches found."
+    done
+  echo -en "Matches found: "
   num_lines "$search"
 }
 
